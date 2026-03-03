@@ -348,69 +348,182 @@ const Stats = () => {
 };
 
 const DashboardDemo = () => {
+  const [activeTab, setActiveTab] = useState<'agenda' | 'clientes' | 'financeiro'>('agenda');
+  
   const slots = [
     { time: "08:00", status: "free" },
-    { time: "09:00", status: "booked", service: "Banho Completo", pet: "Max", confirmed: true },
-    { time: "10:00", status: "booked", service: "Tosa Higiênica", pet: "Luna", confirmed: false },
+    { time: "09:00", status: "booked", service: "Banho Completo", pet: "Max", owner: "João Silva", confirmed: true },
+    { time: "10:00", status: "booked", service: "Tosa Higiênica", pet: "Luna", owner: "Maria Oliveira", confirmed: false },
     { time: "11:00", status: "free" },
-    { time: "12:00", status: "booked", service: "Consulta Vet", pet: "Thor", confirmed: true },
+    { time: "12:00", status: "booked", service: "Consulta Vet", pet: "Thor", owner: "Carlos Souza", confirmed: true },
     { time: "13:00", status: "free" },
-    { time: "14:00", status: "booked", service: "Banho + Tosa", pet: "Bella", confirmed: true },
-    { time: "15:00", status: "free" },
-    { time: "16:00", status: "free" },
-    { time: "17:00", status: "booked", service: "Vacinação", pet: "Mel", confirmed: false },
-    { time: "18:00", status: "free" },
-    { time: "19:00", status: "free" },
+    { time: "14:00", status: "booked", service: "Banho + Tosa", pet: "Bella", owner: "Ana Costa", confirmed: true },
+  ];
+
+  const clients = [
+    { pet: "Max", breed: "Golden Retriever", owner: "João Silva", lastVisit: "15 Fev" },
+    { pet: "Luna", breed: "Shih Tzu", owner: "Maria Oliveira", lastVisit: "20 Fev" },
+    { pet: "Thor", breed: "Bulldog", owner: "Carlos Souza", lastVisit: "28 Fev" },
+    { pet: "Bella", breed: "Poodle", owner: "Ana Costa", lastVisit: "01 Mar" },
+    { pet: "Mel", breed: "Beagle", owner: "Roberto Lima", lastVisit: "10 Jan" },
   ];
 
   return (
     <section id="demo" className="py-24 bg-zinc-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Seu Painel de Controle</h2>
-          <p className="text-zinc-400 max-w-2xl mx-auto">Interface intuitiva para gerir tudo em tempo real</p>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Explore o Sistema</h2>
+          <p className="text-zinc-400 max-w-2xl mx-auto">Veja como é fácil gerenciar seu PetShop com nossa interface intuitiva</p>
         </div>
 
         <div className="max-w-4xl mx-auto rounded-2xl border border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl">
-          <div className="p-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="h-8 w-32 bg-zinc-800 rounded-lg flex items-center px-3 text-xs text-zinc-500">Hoje, 02 Mar</div>
-              <div className="flex gap-1">
-                <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-400">‹</div>
-                <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-400">›</div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <div className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold border border-green-500/20">Dia</div>
-              <div className="px-3 py-1 rounded-full text-zinc-500 text-xs font-bold">Semana</div>
-            </div>
+          {/* Tabs Navigation */}
+          <div className="flex border-b border-zinc-800">
+            <button 
+              onClick={() => setActiveTab('agenda')}
+              className={`flex-1 py-4 text-sm font-bold transition-colors flex items-center justify-center gap-2 ${activeTab === 'agenda' ? 'bg-zinc-800 text-green-500 border-b-2 border-green-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              <Calendar className="w-4 h-4" /> Agenda
+            </button>
+            <button 
+              onClick={() => setActiveTab('clientes')}
+              className={`flex-1 py-4 text-sm font-bold transition-colors flex items-center justify-center gap-2 ${activeTab === 'clientes' ? 'bg-zinc-800 text-green-500 border-b-2 border-green-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              <Users className="w-4 h-4" /> Clientes
+            </button>
+            <button 
+              onClick={() => setActiveTab('financeiro')}
+              className={`flex-1 py-4 text-sm font-bold transition-colors flex items-center justify-center gap-2 ${activeTab === 'financeiro' ? 'bg-zinc-800 text-green-500 border-b-2 border-green-500' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              <BarChart3 className="w-4 h-4" /> Financeiro
+            </button>
           </div>
-          
-          <div className="divide-y divide-zinc-800">
-            {slots.map((slot, i) => (
-              <div key={i} className="flex items-center min-h-[60px] group hover:bg-zinc-800/30 transition-colors">
-                <div className="w-20 px-4 text-sm font-mono text-zinc-500 border-r border-zinc-800 h-full flex items-center">
-                  {slot.time}
-                </div>
-                <div className="flex-1 px-4 py-2">
-                  {slot.status === 'booked' ? (
-                    <div className={`p-2 rounded-lg border flex items-center justify-between ${slot.confirmed ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-zinc-200">{slot.service}</span>
-                        <span className="text-xs text-zinc-400">— {slot.pet}</span>
+
+          <div className="p-0 min-h-[400px]">
+            <AnimatePresence mode="wait">
+              {activeTab === 'agenda' && (
+                <motion.div 
+                  key="agenda"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="divide-y divide-zinc-800"
+                >
+                  <div className="p-4 bg-zinc-900/50 flex items-center justify-between">
+                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Segunda-feira, 02 de Março</div>
+                    <div className="flex gap-2">
+                      <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 text-xs cursor-pointer hover:bg-zinc-700 transition-colors">‹</div>
+                      <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center text-zinc-400 text-xs cursor-pointer hover:bg-zinc-700 transition-colors">›</div>
+                    </div>
+                  </div>
+                  {slots.map((slot, i) => (
+                    <div key={i} className="flex items-center min-h-[60px] group hover:bg-zinc-800/30 transition-colors">
+                      <div className="w-20 px-4 text-sm font-mono text-zinc-500 border-r border-zinc-800 h-full flex items-center">
+                        {slot.time}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${slot.confirmed ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black'}`}>
-                          {slot.confirmed ? '✓ Confirmado' : 'Pendente'}
-                        </span>
+                      <div className="flex-1 px-4 py-2">
+                        {slot.status === 'booked' ? (
+                          <div className={`p-2 rounded-lg border flex items-center justify-between cursor-pointer hover:scale-[1.01] transition-transform ${slot.confirmed ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+                            <div className="flex flex-col">
+                              <span className="text-sm font-bold text-zinc-200">{slot.service}</span>
+                              <span className="text-[10px] text-zinc-400">{slot.pet} ({slot.owner})</span>
+                            </div>
+                            <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${slot.confirmed ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black'}`}>
+                              {slot.confirmed ? 'Confirmado' : 'Pendente'}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-zinc-700 italic group-hover:text-zinc-600 transition-colors cursor-pointer">+ Adicionar Agendamento</div>
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <div className="text-xs text-zinc-700 italic group-hover:text-zinc-600 transition-colors">Livre</div>
-                  )}
-                </div>
-              </div>
-            ))}
+                  ))}
+                </motion.div>
+              )}
+
+              {activeTab === 'clientes' && (
+                <motion.div 
+                  key="clientes"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="p-4"
+                >
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Base de Dados de Pets</div>
+                    <button className="text-xs bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-green-500 transition-colors">+ Novo Pet</button>
+                  </div>
+                  <div className="space-y-3">
+                    {clients.map((client, i) => (
+                      <div key={i} className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between group hover:border-green-500/30 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-500 group-hover:bg-green-500/10 group-hover:text-green-500 transition-colors">
+                            <PawPrint className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-zinc-200">{client.pet}</div>
+                            <div className="text-[10px] text-zinc-500">{client.breed} • {client.owner}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-[10px] text-zinc-500 uppercase font-bold">Última Visita</div>
+                          <div className="text-xs text-zinc-300">{client.lastVisit}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === 'financeiro' && (
+                <motion.div 
+                  key="financeiro"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="p-8"
+                >
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 uppercase font-bold mb-1">Faturamento Mensal</div>
+                      <div className="text-2xl font-black text-green-500">R$ 12.450,00</div>
+                      <div className="text-[10px] text-green-500/60 font-bold mt-1">↑ 12% vs mês anterior</div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 uppercase font-bold mb-1">Ticket Médio</div>
+                      <div className="text-2xl font-black text-blue-500">R$ 145,00</div>
+                      <div className="text-[10px] text-blue-500/60 font-bold mt-1">↑ 5% vs mês anterior</div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800">
+                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-6">Serviços mais Rentáveis</div>
+                    <div className="space-y-4">
+                      {[
+                        { name: 'Banho & Tosa', value: 65, color: 'bg-green-500' },
+                        { name: 'Consultas', value: 25, color: 'bg-blue-500' },
+                        { name: 'Vacinas', value: 10, color: 'bg-purple-500' }
+                      ].map((item, i) => (
+                        <div key={i} className="space-y-2">
+                          <div className="flex justify-between text-[10px] font-bold uppercase">
+                            <span className="text-zinc-400">{item.name}</span>
+                            <span className="text-zinc-200">{item.value}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${item.value}%` }}
+                              transition={{ duration: 1, delay: i * 0.2 }}
+                              className={`h-full ${item.color}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -463,7 +576,7 @@ const IntermediateCTA = () => {
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-green-700 font-bold text-lg hover:bg-green-50 transition-all"
           >
-            Começar 30 Dias Gratuitos
+            Quero Organizar Agora
           </a>
           <a 
             href="#faq"
@@ -523,7 +636,7 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <div className="text-sm text-zinc-500">E-mail</div>
-                  <div className="text-zinc-200">contato@petshoppro.com.br</div>
+                  <div className="text-zinc-200">oakstudiotattos@gamil.com</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -598,8 +711,8 @@ const ContactForm = () => {
 
 const FAQ = () => {
   const faqs = [
-    { q: "Como faço para começar?", a: "É muito simples! Clique em 'Começar Agora', crie sua conta com seu email ou telefone, receba um link mágico para acessar, e pronto! Você já pode começar a organizar seus agendamentos." },
-    { q: "Qual é o período de testes?", a: "Oferecemos 30 dias completamente grátis, com acesso a todas as funcionalidades. Sem necessidade de cartão de crédito. Após esse período, você escolhe o plano que melhor se adequa ao seu PetShop." },
+    { q: "Como faço para começar?", a: "É muito simples! Clique em 'Começar Agora', entre em contato conosco pelo WhatsApp ou formulário, e nossa equipe configurará seu acesso personalizado em poucos minutos." },
+    { q: "Como funciona a contratação?", a: "Oferecemos planos flexíveis que se adequam ao tamanho do seu PetShop. Após o contato inicial, fazemos uma demonstração completa do sistema e ativamos sua conta imediatamente após a escolha do plano." },
     { q: "Posso usar em mobile?", a: "Sim! Nosso sistema é totalmente responsivo. Você acessa de qualquer dispositivo: smartphone, tablet ou computador. Mesmo design moderno e funcional em qualquer tela." },
     { q: "E se eu tiver muitos clientes?", a: "Nosso sistema foi construído para crescer com você! Não importa se você tem 10 clientes ou 10 mil. O sistema escala perfeitamente e continua rápido e responsivo." },
     { q: "Meus dados estão seguros?", a: "100% seguro! Usamos criptografia de ponta a ponta, servidores em data centers certificados e backups automáticos diários. Seus dados são sua propriedade." },
@@ -671,10 +784,10 @@ const FinalCTA = () => {
             Quero Organizar Meu PetShop Agora
           </a>
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-green-200/60 text-sm font-medium">
-            <span>✓ 30 dias grátis</span>
-            <span>✓ Sem cartão necessário</span>
-            <span>✓ Suporte completo</span>
-            <span>✓ Cancelamento a qualquer momento</span>
+            <span>✓ Gestão Profissional</span>
+            <span>✓ Suporte Prioritário</span>
+            <span>✓ Treinamento Gratuito</span>
+            <span>✓ Sem Taxa de Adesão</span>
           </div>
         </motion.div>
       </div>
