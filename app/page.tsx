@@ -636,7 +636,7 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <div className="text-sm text-zinc-500">E-mail</div>
-                  <div className="text-zinc-200">oakstudiotattos@gamil.com</div>
+                  <div className="text-zinc-200">oaktattostudio@gmail.com</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
